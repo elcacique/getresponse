@@ -1,0 +1,117 @@
+<div class="panel panel-primary">
+	<div class="panel-heading">Создание нового GR процесса</div>
+	<form action="/getresponse/new/" id="campaign-form" method="post" role="form">
+	<div class="panel-body">
+	
+		<div class="btn-group btn-toggle"> 
+			<button onClick="return false" id="copyContacts" class="btnContactsAction btn btn-lg btn-default">Копировать контакты</button>
+			<button onClick="return false" id="moveContacts" class="btnContactsAction btn btn-lg btn-success active">Переместить контакты</button>
+		</div>
+	  	<br><br>
+	  
+	  
+		<div class="form-group">	
+			<div class="col-lg-4">	
+				C кампании				
+				<div class="form-group">
+					<select class="form-control" name="campaign" id="campaign">
+						<option value="0" selected="selected">Выберите кампанию</option>
+						{CAMPAIGNS}
+					</select>
+				</div>
+			</div>
+			
+			<div class="col-lg-4">	
+				В кампанию				
+				<div class="form-group">
+					<select class="form-control" name="campaignTarget" id="campaignTarget">
+						<option value="0" selected="selected">Выберите кампанию</option>
+						{CAMPAIGNS}
+					</select>
+				</div>
+			</div>
+		</div>
+		<br><br><br>
+		
+		<div class="col-lg-4">		
+			<div class="input-group">
+				<span class="input-group-addon">
+					<input id="cycleDaySwitch" type="checkbox"> Добавить в цикл на день
+				</span>
+				<input id="cycleDay" name="cycleDay" disabled value="-1" type="text" class="form-control">
+			</div>
+		</div>
+		<br><br><br>
+		
+		<div class="col-lg-4">		
+			<div class="input-group">
+				<span class="input-group-addon">
+					<span id="copyMove">Перемещать</span> каждые
+				</span>
+				<input id="cycleDay" name="cycleDay" value="1" type="text" class="form-control">
+				<span class="input-group-addon">
+					дней
+				</span>
+			</div>
+		</div>
+		<br><br><br>
+		<button onClick="checkInformation(); return false" class="btn btn-success btn-lg">
+			<span class="glyphicon glyphicon-ok-sign"></span> Сохранить
+		</button>
+		<!-- 
+		<div class="col-lg-4">	
+			<div class="form-inline">	
+				Дата создания
+				<div class="form-group">
+					<input value="" type="date" class="form-control" id="dateCreate" name="dateCreate">
+				</div>
+			</div>
+		</div>
+		 -->
+	  <br><br>
+	</div>
+	</form>
+</div>
+
+<script>
+$('.btn-toggle').click(function() {
+    $(this).find('.btnContactsAction').toggleClass('active');  
+    $("#copyMove").text('Перемещать');
+
+    console.log( $(".btn-toggle .active").attr('id') );
+	if ($(".btn-toggle .active").attr('id') == 'copyContacts')
+		$("#copyMove").text('Копировать');
+	else $("#copyMove").text('Перемещать');
+    
+    if ($(this).find('.btn-success').size()>0) {       
+    	$(this).find('.btnContactsAction').toggleClass('btn-success');
+    }       
+});
+
+$('#cycleDaySwitch').on('change', function(){
+	var switcher = $('#cycleDaySwitch').is(':checked');
+	if (switcher == true){
+		$("#cycleDay").removeAttr('disabled');
+	}
+	else {
+		$("#cycleDay").attr('disabled', 'disabled');
+	}
+});
+
+function checkInformation(){
+	if($( "#campaign option:selected" ).val() == '0' || $( "#campaignTarget option:selected" ).val() == '0') {
+		alert('Укажите кампанию');
+	} else{
+		$( "#campaign-form" ).submit();
+	}
+}
+
+/*
+var d = new Date();
+var month = d.getMonth()+1;
+var day = d.getDate();
+var date = (day<10 ? '0' : '') + day + '.' +
+	(month<10 ? '0' : '') + month + '.' +
+	d.getFullYear();
+*/
+</script>
