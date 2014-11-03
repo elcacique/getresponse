@@ -38,6 +38,7 @@ if ($_REQUEST['mod'] == 'getresponse') {
 			'eachDay' => $_REQUEST['eachDay']
 		);
 		$getResponse->addProcess($data);
+		print '<script language="javascript">document.location = "/getresponse/";</script>';
 	}
 	else $macros['content'] = file_get_contents(TPLDIR.$modTplDir.'/getResponse.html');
 	
