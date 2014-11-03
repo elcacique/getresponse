@@ -64,20 +64,6 @@ class GetResponse{
 		return $campaign;
 	}
 	
-	/**
-	 * Выводит список кампаний в виде списка <select>
-	 * @param 		array $campaigns
-	 * @return 		string список кампаний
-	 * @author 		Игорь Быра <ihorbyra@gmail.com>
-	 * @version 	1.0
-	 */
-	public function printCampaigns($campaigns) {	
-		foreach ($campaigns as $campaignId => $campaignInfo) {
-			$content .= '<option value="'.$campaignId.'">'.$campaignInfo['name'].'</option>';
-		}
-		return $content;
-	}
-	
 	
 	/**
 	 * Получает информацию о контактах кампании $campaign, созданых в период с $data['date_start'] до $data['date_end']
@@ -184,6 +170,54 @@ class GetResponse{
 		$query = "INSERT INTO `campaign_actions` (`id`, `action`, `campaign`, `campaignTarget`, `cycleDay`, `eachDay`, `date`) 
 					VALUES (NULL, '{$data['action']}', '{$data['campaign']}', '{$data['campaignTarget']}', '{$data['cycleDay']}', '{$data['eachDay']}', '{$date}')";
 		$result = $this->db->Execute($query);
+	}
+	
+	/**
+	 * Выводит список кампаний в виде списка <select>
+	 * @param 		array $campaigns
+	 * @return 		string список кампаний
+	 * @author 		Игорь Быра <ihorbyra@gmail.com>
+	 * @version 	1.0
+	 */
+	public function printCampaigns($campaigns) {	
+		foreach ($campaigns as $campaignId => $campaignInfo) {
+			$content .= '<option value="'.$campaignId.'">'.$campaignInfo['name'].'</option>';
+		}
+		return $content;
+	}
+	
+	public function getProcesses() {
+		$query = "SELECT * FROM `campaign_actions` ORDER BY `id` DESC";
+		$result = $this->db->Execute($query);
+		$num = mysql_num_rows($result);
+		
+		if ($num > 0) {
+			$content = '<table class="table table-hover">
+							<tr>
+								<th>#</th>
+								<th>Дата создания</th>
+								<th>Действие</th>
+								<th>Кампания(источник)</th>
+								<th>Кампания(цель)</th>
+								<th>Цикл на день</th>
+								<th>Делается каждые</th>								
+							</tr>';
+			while ($row = mysql_fetch_object($result)) {
+				$action = (($row->action == '0') ? 'копирование' : 'перемещение');
+				$content .= '<tr>
+								<td>'.$row->id.'</td>
+								<td>'.$row->date.'</td>
+								<td>'.$action.'</td>
+								<td>'.$row->campaign.'</td>
+								<td>'.$row->campaignTarget.'</td>
+								<td>'.$row->cycleDay.'</td>
+								<td>'.$row->eachDay.'</td>
+							</tr>';
+			} 
+			$content .= '</table>';
+			return $content;
+		}		
+		return 'На данный момент нет ниодного процесса';
 	}
 }
 

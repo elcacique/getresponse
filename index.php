@@ -40,7 +40,11 @@ if ($_REQUEST['mod'] == 'getresponse') {
 		$getResponse->addProcess($data);
 		print '<script language="javascript">document.location = "/getresponse/";</script>';
 	}
-	else $macros['content'] = file_get_contents(TPLDIR.$modTplDir.'/getResponse.html');
+	else {
+		$data['processes'] = $getResponse->getProcesses();
+		$content = $template->ParseTpl($modTplDir.'/getResponse.html', $data, false);
+		$macros['content'] = $content;
+	}
 	
 	$macros['headline'] = 'Автоматизация GR подписчиков';
 	$macros['breadcrumb'] = '<li class="active"><i class="fa fa-envelope"></i> '.$macros['headline'].'</li>';
