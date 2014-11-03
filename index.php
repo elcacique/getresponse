@@ -2,7 +2,6 @@
 session_start();
 require_once $_SERVER['DOCUMENT_ROOT']."/conf/conf.php";
 
-$db = new DB_MySQL();
 $template = new Template_Parser();
 
 /*
@@ -29,6 +28,16 @@ if ($_REQUEST['mod'] == 'getresponse') {
 		$content = $template->ParseTpl($modTplDir.'/newForm.html', $gr, false);
 		
 		$macros['content'] = $content;
+	}
+	elseif ($_REQUEST['sub'] == 'new') {
+		$data = array(
+			'action' => $_REQUEST['action'],
+			'campaign' => $_REQUEST['campaign'],
+			'campaignTarget' => $_REQUEST['campaignTarget'],
+			'cycleDay' => (isset($_REQUEST['cycleDay']) ? $_REQUEST['cycleDay'] : '-1'),
+			'eachDay' => $_REQUEST['eachDay']
+		);
+		$getResponse->addProcess($data);
 	}
 	else $macros['content'] = file_get_contents(TPLDIR.$modTplDir.'/getResponse.html');
 	

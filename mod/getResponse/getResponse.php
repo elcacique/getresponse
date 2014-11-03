@@ -8,9 +8,11 @@ class GetResponse{
 	//private $apiUrl = 'http://api2.getresponse.com'; // test url
 	
 	private $client;
+	private $db;
 	
 	public function __construct() {
 		$this->client = new jsonRPCClient($this->apiUrl);
+		$this->db = new DB_MySQL();
 	}
 	
 	/**
@@ -76,11 +78,6 @@ class GetResponse{
 		return $content;
 	}
 	
-	public function function_name() {
-		;
-	}
-	
-	INSERT INTO `getresponse`.`campaign_actions` (`id`, `action`, `campaign`, `campaignTarget`, `cycleDay`, `eachDay`, `date`) VALUES (NULL, '1', 'q123', 'w123', '-1', '1', '2014-10-29');
 	
 	/**
 	 * Получает информацию о контактах кампании $campaign, созданых в период с $data['date_start'] до $data['date_end']
@@ -173,8 +170,20 @@ class GetResponse{
 						  'cycle_day' => $cycleDay
 					)
 			);
-	   	}	
-		
+	   	}			
+	}
+	
+	/**
+	 * Создает процесс по работе с кампаниями
+	 * @return 		void
+	 * @author 		Игорь Быра <ihorbyra@gmail.com>
+	 * @version 	1.0
+	 */
+	public function addProcess($data) {
+		$date = date('Y-m-d');
+		$query = "INSERT INTO `campaign_actions` (`id`, `action`, `campaign`, `campaignTarget`, `cycleDay`, `eachDay`, `date`) 
+					VALUES (NULL, '{$data['action']}', '{$data['campaign']}', '{$data['campaignTarget']}', '{$data['cycleDay']}', '{$data['eachDay']}', '{$date}')";
+		$result = $this->db->Execute($query);
 	}
 }
 

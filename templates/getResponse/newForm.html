@@ -1,6 +1,7 @@
 <div class="panel panel-primary">
 	<div class="panel-heading">Создание нового GR процесса</div>
-	<form action="/getresponse/new/" id="campaign-form" method="post" role="form">
+	<form action="/getresponse/new/" id="campaign-form" name="campaign-form" method="post" role="form">
+	<input type="hidden" name="action" id="action" value="1">
 	<div class="panel-body">
 	
 		<div class="btn-group btn-toggle"> 
@@ -48,7 +49,7 @@
 				<span class="input-group-addon">
 					<span id="copyMove">Перемещать</span> каждые
 				</span>
-				<input id="cycleDay" name="cycleDay" value="1" type="text" class="form-control">
+				<input id="eachDay" name="eachDay" value="1" type="text" class="form-control">
 				<span class="input-group-addon">
 					дней
 				</span>
@@ -79,9 +80,14 @@ $('.btn-toggle').click(function() {
     $("#copyMove").text('Перемещать');
 
     console.log( $(".btn-toggle .active").attr('id') );
-	if ($(".btn-toggle .active").attr('id') == 'copyContacts')
+	if ($(".btn-toggle .active").attr('id') == 'copyContacts') {
 		$("#copyMove").text('Копировать');
-	else $("#copyMove").text('Перемещать');
+		$("#action").val('0');
+	}
+	else {
+		$("#copyMove").text('Перемещать');
+		$("#action").val('1');
+	}
     
     if ($(this).find('.btn-success').size()>0) {       
     	$(this).find('.btnContactsAction').toggleClass('btn-success');
