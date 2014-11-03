@@ -186,6 +186,12 @@ class GetResponse{
 		return $content;
 	}
 	
+	/**
+	 * Вывод все процессов
+	 * @return 		string список процессов
+	 * @author 		Игорь Быра <ihorbyra@gmail.com>
+	 * @version 	1.0
+	 */
 	public function getProcesses() {
 		$query = "SELECT * FROM `campaign_actions` ORDER BY `id` DESC";
 		$result = $this->db->Execute($query);
