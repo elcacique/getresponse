@@ -1,3 +1,18 @@
 <button onClick="locate('/getresponse/newForm/')" type="button" class="btn btn-primary btn-lg">Создать GR процесс</button>
 <br /><br />
 {PROCESSES}
+<script>
+function deleteProcess(id) {
+	$.ajax( {
+		type: "POST",
+		url: "/ajax.php",
+		data: {
+			"do": "deleteProcess",
+			"id": id
+		},
+		success: function(data){			
+			$("#process_"+id).remove();
+		}
+	});
+}
+</script>

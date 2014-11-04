@@ -23,10 +23,16 @@ if ($_REQUEST['mod'] == 'getresponse') {
 	$getResponse = new GetResponse();
 	
 	if ($_REQUEST['sub'] == 'newForm') {
-		$campaigns = $getResponse->getCampaigns();
-		$gr['campaigns'] = $getResponse->printCampaigns($campaigns);
-		$content = $template->ParseTpl($modTplDir.'/newForm.html', $gr, false);
-		
+		if (!empty($_REQUEST['sub2'])) {
+			$process = $getResponse->getProcess($id);
+			$campaigns = $getResponse->getCampaigns();
+			$gr['campaigns'] = $getResponse->printCampaigns($campaigns);
+		}
+		else {
+			$campaigns = $getResponse->getCampaigns();
+			$gr['campaigns'] = $getResponse->printCampaigns($campaigns);
+		}	
+		$content = $template->ParseTpl($modTplDir.'/newForm.html', $gr, false);	
 		$macros['content'] = $content;
 	}
 	elseif ($_REQUEST['sub'] == 'new') {

@@ -173,6 +173,41 @@ class GetResponse{
 	}
 	
 	/**
+	 * Выводит информацию о процессе
+	 * @param 		int $id
+	 * @return 		array
+	 * @author 		Игорь Быра <ihorbyra@gmail.com>
+	 * @version 	1.0
+	 */
+	public function getProcess($id) {
+		$query = "SELECT * FROM `campaign_actions` WHERE `id` = '{$id}'";
+		$result = $this->db->Execute($query);
+		$row = mysql_fetch_object($result);
+		$process = array(
+			'id' => $row->id,
+			'action' => $row->action,
+			'campaign' => $row->campaign,
+			'campaignTarget' => $row->campaignTarget,
+			'cycleDay' => $row->cycleDay,
+			'eachDay' => $row->eachDay,
+			'date' => $row->date
+		);
+		return $process;
+	}
+	
+	/**
+	 * Удаляет процесс
+	 * @param 		int $id - ID процесса
+ 	 * @return 		void
+	 * @author 		Игорь Быра <ihorbyra@gmail.com>
+	 * @version 	1.0
+	 */
+	public function deleteProcess($id) {
+		$query = "UPDATE `campaign_actions` SET `deleted` = '1' WHERE `id` = '{$id}'";
+		$result = $this->db->Execute($query);
+	}
+	
+	/**
 	 * Выводит список кампаний в виде списка <select>
 	 * @param 		array $campaigns
 	 * @return 		string список кампаний
@@ -193,31 +228,41 @@ class GetResponse{
 	 * @version 	1.0
 	 */
 	public function getProcesses() {
-		$query = "SELECT * FROM `campaign_actions` ORDER BY `id` DESC";
+		$query = "SELECT * FROM `campaign_actions` WHERE `deleted` = '0' ORDER BY `id` DESC";
 		$result = $this->db->Execute($query);
 		$num = mysql_num_rows($result);
 		
 		if ($num > 0) {
 			$content = '<table class="table table-hover">
 							<tr>
-								<th>#</th>
 								<th>Дата создания</th>
 								<th>Действие</th>
 								<th>Кампания(источник)</th>
 								<th>Кампания(цель)</th>
 								<th>Цикл на день</th>
-								<th>Делается каждые</th>								
+								<th>Делается каждые</th>
+								<td>&nbsp;</td>		
+								<td>&nbsp;</td>							
 							</tr>';
 			while ($row = mysql_fetch_object($result)) {
 				$action = (($row->action == '0') ? 'копирование' : 'перемещение');
-				$content .= '<tr>
-								<td>'.$row->id.'</td>
+				$content .= '<tr id="process_'.$row->id.'">
 								<td>'.$row->date.'</td>
 								<td>'.$action.'</td>
 								<td>'.$row->campaign.'</td>
 								<td>'.$row->campaignTarget.'</td>
 								<td>'.$row->cycleDay.'</td>
 								<td>'.$row->eachDay.'</td>
+								<td>
+									<button onClick="locate(\'/getresponse/newForm/'.$row->id.'/\')" type="button" class="btn btn-default btn-sm">
+									  <span class="glyphicon glyphicon-pencil"></span>
+									</button>
+								</td>	
+								<td>
+									<button onClick="deleteProcess('.$row->id.')" type="button" class="btn btn-default btn-sm">
+									  <span class="glyphicon glyphicon-remove"></span>
+									</button>
+								</td>	
 							</tr>';
 			} 
 			$content .= '</table>';
