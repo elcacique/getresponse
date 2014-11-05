@@ -24,15 +24,30 @@ if ($_REQUEST['mod'] == 'getresponse') {
 	
 	if ($_REQUEST['sub'] == 'newForm') {
 		if (!empty($_REQUEST['sub2'])) {
-			$process = $getResponse->getProcess($id);
-			$campaigns = $getResponse->getCampaigns();
-			$gr['campaigns'] = $getResponse->printCampaigns($campaigns);
+			$process = $getResponse->getProcess($_REQUEST['sub2']);
+			$campaign = $process['campaign'];
+			$campaignTarget = $process['campaignTarget'];
+			$action = $process['action'];
+			$cycleDay = $process['cycleDay'];
+			$eachDay = $process['eachDay'];
 		}
 		else {
-			$campaigns = $getResponse->getCampaigns();
-			$gr['campaigns'] = $getResponse->printCampaigns($campaigns);
+			$campaign = null;
+			$campaignTarget = null;
+			$action = 1;
+			$cycleDay = '-1';
+			$eachDay = 1;
 		}	
-		$content = $template->ParseTpl($modTplDir.'/newForm.html', $gr, false);	
+		
+		$campaigns = $getResponse->getCampaigns();
+		$data = array(
+			'campaign' => $getResponse->printCampaigns($campaigns, $campaign),
+			'campaignTarget' => $getResponse->printCampaigns($campaigns, $campaignTarget),
+			'action' => $action,
+			'cycleDay' => $cycleDay,
+			'eachDay' => $eachDay
+		);
+		$content = $template->ParseTpl($modTplDir.'/newForm.html', $data, false);	
 		$macros['content'] = $content;
 	}
 	elseif ($_REQUEST['sub'] == 'new') {
@@ -63,6 +78,7 @@ else {
 
 
 $tpl = 'default.html';
+//$tpl = 'test.html';
 $template->ParseTpl($tpl, $macros);
 
 ?>

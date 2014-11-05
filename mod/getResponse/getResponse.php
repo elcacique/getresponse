@@ -214,9 +214,10 @@ class GetResponse{
 	 * @author 		Игорь Быра <ihorbyra@gmail.com>
 	 * @version 	1.0
 	 */
-	public function printCampaigns($campaigns) {	
+	public function printCampaigns($campaigns, $currentCampaign = null) {	
 		foreach ($campaigns as $campaignId => $campaignInfo) {
-			$content .= '<option value="'.$campaignId.'">'.$campaignInfo['name'].'</option>';
+			$selected = (($currentCampaign !== null && $currentCampaign == $campaignId) ? ' selected' : '');
+			$content .= '<option'.$selected.' value="'.$campaignId.'">'.$campaignInfo['name'].'</option>';
 		}
 		return $content;
 	}
@@ -254,12 +255,12 @@ class GetResponse{
 								<td>'.$row->cycleDay.'</td>
 								<td>'.$row->eachDay.'</td>
 								<td>
-									<button onClick="locate(\'/getresponse/newForm/'.$row->id.'/\')" type="button" class="btn btn-default btn-sm">
+									<button onClick="locate(\'/getresponse/newForm/'.$row->id.'/\')" type="button" class="btn btn-success btn-sm">
 									  <span class="glyphicon glyphicon-pencil"></span>
 									</button>
 								</td>	
 								<td>
-									<button onClick="deleteProcess('.$row->id.')" type="button" class="btn btn-default btn-sm">
+									<button onClick="deleteProcess('.$row->id.')" type="button" class="btn btn-danger btn-sm">
 									  <span class="glyphicon glyphicon-remove"></span>
 									</button>
 								</td>	

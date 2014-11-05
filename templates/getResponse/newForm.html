@@ -1,9 +1,8 @@
 <div class="panel panel-primary">
 	<div class="panel-heading">Создание нового GR процесса</div>
 	<form action="/getresponse/new/" id="campaign-form" name="campaign-form" method="post" role="form">
-	<input type="hidden" name="action" id="action" value="1">
+	<input type="hidden" name="action" id="action" value="{ACTION}">
 	<div class="panel-body">
-	
 		<div class="btn-group btn-toggle"> 
 			<button onClick="return false" id="copyContacts" class="btnContactsAction btn btn-lg btn-default">Копировать контакты</button>
 			<button onClick="return false" id="moveContacts" class="btnContactsAction btn btn-lg btn-success active">Переместить контакты</button>
@@ -17,7 +16,7 @@
 				<div class="form-group">
 					<select class="form-control" name="campaign" id="campaign">
 						<option value="0" selected="selected">Выберите кампанию</option>
-						{CAMPAIGNS}
+						{CAMPAIGN}
 					</select>
 				</div>
 			</div>
@@ -27,7 +26,7 @@
 				<div class="form-group">
 					<select class="form-control" name="campaignTarget" id="campaignTarget">
 						<option value="0" selected="selected">Выберите кампанию</option>
-						{CAMPAIGNS}
+						{CAMPAIGNTARGET}
 					</select>
 				</div>
 			</div>
@@ -71,10 +70,29 @@
 		 -->
 	  <br><br>
 	</div>
+	<input type="hidden" name="cycleDayInfo" id="cycleDayInfo" value="{CYCLEDAY}">
+	<input type="hidden" name="eachDayInfo" id="eachDayInfo" value="{EACHDAY}">
 	</form>
 </div>
 
 <script>
+
+var action = $("#action").val();
+$("#eachDay").val($('#eachDayInfo').val());
+
+if(action == 0) {
+	$('.btn-toggle').find('.btnContactsAction').toggleClass('active');  
+	$('.btn-toggle').find('.btnContactsAction').toggleClass('btn-success');
+}
+if ($(".btn-toggle .active").attr('id') == 'copyContacts') $("#copyMove").text('Копировать');
+	else $("#copyMove").text('Перемещать');
+
+if($('#cycleDayInfo').val() != '-1') {
+	$('#cycleDaySwitch').prop('checked', true);
+	$("#cycleDay").removeAttr('disabled');
+	$("#cycleDay").val($('#cycleDayInfo').val());
+}
+
 $('.btn-toggle').click(function() {
     $(this).find('.btnContactsAction').toggleClass('active');  
     $("#copyMove").text('Перемещать');
