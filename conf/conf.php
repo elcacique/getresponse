@@ -19,6 +19,7 @@ ini_set("error_log", $_SERVER['DOCUMENT_ROOT']."/errors/errors.log");
 
 require_once $_SERVER['DOCUMENT_ROOT'].'/lib/db/mysql.php';
 require_once $_SERVER['DOCUMENT_ROOT'].'/lib/template/parser.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/lib/authorization/authorization.php';
 
 require_once $_SERVER['DOCUMENT_ROOT'].'/mod/getResponse/jsonRPCClient.php';
 require_once $_SERVER['DOCUMENT_ROOT'].'/mod/getResponse/getResponse.php';

@@ -1,0 +1,1 @@
+00 7 * * * /usr/local/bin/php -q $HOME/script.php

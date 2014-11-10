@@ -3,18 +3,27 @@ session_start();
 require_once $_SERVER['DOCUMENT_ROOT']."/conf/conf.php";
 
 $template = new Template_Parser();
+$authorization = new Authorization();
 
-/*
-if(empty($_REQUEST['mod']) or !isset($_SESSION['admin'])) {
+
+if(!isset($_SESSION['admin'])) {
 	$tpl = 'login.html';
 }
 else {
 	$tpl = 'default.html';
 }
-*/
 
-
-if ($_REQUEST['mod'] == 'getresponse') {
+if (!isset($_SESSION['admin'])) {
+	$admin = $authorization->login($_REQUEST['login'], $_REQUEST['password']);
+	$macros = array(null);
+	if ($admin === true)
+		print '<script language="javascript">document.location = "/";</script>';
+}
+elseif ($_REQUEST['mod'] == 'logout') {
+	$authorization->logout();
+	
+}
+elseif ($_REQUEST['mod'] == 'getresponse') {
 	$apiUrl = 'http://api.getresponse360.com/alexschool';
 	//$apiUrl = 'http://api2.getresponse.com'; // test url
 	$modTplDir = '/getResponse';
@@ -77,8 +86,6 @@ else {
 }
 
 
-$tpl = 'default.html';
-//$tpl = 'test.html';
 $template->ParseTpl($tpl, $macros);
 
 ?>
